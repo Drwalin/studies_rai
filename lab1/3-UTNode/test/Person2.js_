@@ -1,0 +1,46 @@
+var expect = require('chai').expect;
+var X = require('../src/main');
+var Pojazd = new X().Pojazd2;
+
+describe('test_Pojazd_constructor_function', function() {
+	it('test constructor', function() {
+			var p = new Pojazd(3, 10, 0);
+			expect(3).to.eql(p.id);
+			expect(10).to.eql(p.max_predkosc);
+			expect(0).to.eql(p.predkosc);
+			expect(undefined).to.not.eql(p.status);
+			expect(undefined).to.not.eql(p.start);
+			expect(undefined).to.not.eql(p.stop);
+	});
+	
+	it('private members should be not valid inside function', function() {
+			var p = new Pojazd(3, 10, 0);
+			
+			p.start(14);
+			expect(14).to.eql(p.predkosc);
+	});
+	
+	it('adding function to class prototype after creating object', function() {
+			var p = new Pojazd(3, 10, 0);
+			
+			Pojazd.prototype.NowaFunc = function() {
+				return 666;
+			};
+			
+			expect(666).to.eql(p.NowaFunc());
+	});
+	
+	it('prototype/constructor/_prototype', function() {
+			var p = new Pojazd(3, 10, 0);
+			
+			expect(undefined).to.not.eql(Pojazd.constructor);
+			expect(undefined).to.not.eql(Pojazd.prototype);
+			expect(undefined).to.not.eql(p.constructor);
+			expect(undefined).to.eql(p.prototype);
+			expect(undefined).to.eql(Pojazd._prototype);
+			expect(undefined).to.eql(p._prototype);
+	});
+	
+	
+});
+

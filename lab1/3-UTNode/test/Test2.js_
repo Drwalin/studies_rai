@@ -1,0 +1,26 @@
+var expect = require('chai').expect;
+var X = require('../src/main');
+var Pojazd = new X().Pojazd;
+
+describe('test_Pojazd_constructor_function', function() {
+	it('test constructor', function() {
+			var p = new Pojazd(3, 10, 0);
+			expect(undefined).to.eql(p.id);
+			expect(undefined).to.eql(p.max_predkosc);
+			expect(undefined).to.eql(p.predkosc);
+			expect(undefined).to.not.eql(p.status);
+			expect(undefined).to.not.eql(p.start);
+			expect(undefined).to.not.eql(p.stop);
+	});
+	
+	it('private members should be not valid inside function', function() {
+			var p = new Pojazd(3, 10, 0);
+			
+			p.predkosc = 17;
+			expect(0).to.eql(p.getPredkosc());
+			
+			p.start(14);
+			expect(17).to.eql(p.predkosc);
+	});
+});
+

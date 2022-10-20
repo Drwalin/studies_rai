@@ -1,0 +1,31 @@
+{
+  "name": "UT_in_browser",
+  "version": "1.0.0",
+  "description": "",
+  "main": "",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "karma start --reporters dots,coverage"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/cli": "^7.19.3",
+    "@babel/core": "^7.19.3",
+    "@babel/preset-env": "^7.19.4",
+    "chai": "^4.3.6",
+    "karma": "^6.4.1",
+    "karma-chai": "^0.1.0",
+    "karma-chrome-launcher": "^3.1.1",
+    "karma-clear-screen-reporter": "^1.0.0",
+    "karma-cli": "^2.0.0",
+    "karma-coverage": "^2.2.0",
+    "karma-mocha": "^2.0.1",
+    "mocha": "^10.0.0"
+  },
+  "dependencies": {
+    "karma-firefox-launcher": "^2.1.2"
+  }
+}

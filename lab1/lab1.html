@@ -1,0 +1,143 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-2">    
+</head>
+<body style="background:black; color:white;">
+<h1>RAI - Laboratorium z JavaScript</h1> 
+<h3>Narzedzia i biblioteki</h3>
+	<ul>
+		<li>Przydatne moze byc uzycie Firefox devtools <a href="https://developer.mozilla.org/pl/docs/Tools/">developer tools</a> /Chrome <a href="https://developer.chrome.com/docs/devtools/">developer tools</a>
+		</li>
+		<li><a href="https://docs.npmjs.com/">Dokumentacja</a> do npm-a
+		</li>
+		<li>Testy z uzyciem mocha i chai - <a href="https://codeburst.io/javascript-unit-testing-using-mocha-and-chai-1d97d9f18e71">konfiguracja</a>
+		</li>
+		<li><a href="https://mochajs.org/#installation"> dokumentacja mocha</a> 
+		</li>
+		<li>W3C schools <a href="https://www.w3schools.com/js/js_es6.asp">dokumentacja</a>  - javascript
+		</li>
+		<li>Dokumentacja <a href="https://babeljs.io/docs/en/usage"> Babel</a> 
+		</li>
+	<a href="https://www.tutorialspoint.com/babeljs/babeljs_babel_presets.htm"> presety </a> 
+	i <a href="https://www.tutorialspoint.com/babeljs/babeljs_cli.htm"> CLI </a> oraz
+	 </a>
+	</ul>
+<h4>Jak skonfigurowac nodejs w laboratoriach przy braku uprawnien administratora</h4>
+	<ol>
+	<li>należy sciagnać archiwum zip z binarna wersja nodejs dla windows i rozpakowac do katalogu d:\bin\node</li>
+	<li>otworzyc cmd</li>
+	<li>ustawic zmienna NODEJS_HOME na katalog z binarkami np <code>set NODEJS_HOME=d:\bin\node\node-v14.16.0-win-x64</code></li>
+	<li>dodac katalog na pozcatek sciezki np <code>set PATH=%NODEJS_HOME%;%PATH%</code></li>
+	</ol>
+<h2>Zadania:</h2>
+	<h3>I. Uruchamianie testow jednostkowych 15%</h3>
+	<ul>
+		<li>Zapoznac sie z dokumentacja nt. chai i mocha. 
+		</li>
+		
+		<li>Zapoznac sie z  przykladem 1-UTNode.zip i zademonstrować uruchamianie i debugowanie testów uruchamianych w node<br>
+		<ol>
+			<li>Zapoznac sie z przykladem projektu, z podzialem na testy i kod oraz wykorzystaniem modulow w formacie CommonJS. Odtworzyc zaleznosci i sprawdzic czy modul sie uruchamia. Zaktualizowac zaleznosci np. przez <code>npm audit</code>.</li>
+			<li>uruchomienie testu przez <code>npm test</code></li>
+			<li>Zeby debugowac przyklad w VSCode - konieczne moze byc dodanie konfiguracji debugowej w VSCode: Add configuration -> "Nodejs mocha tests" i w przypadku bledu uruchomienia ew. zmodyfikowanie konfiguracji przez zmiane w pliku lauch.json "tdd" na "bdd"
+			</li>
+		</ol>
+		</li>
+		
+		<li>Zapoznac sie z przykladem 2-UTNodeInBrowser.zip i zademonstrować uruchamianie oraz debugowanie testgów.<br>
+		
+		<ol>
+			<li>Zapoznac sie z przykladem projektu pozwalajacego na uruchamianie testow w przegladarce. </li>
+			<li>Konieczna moze byc aktualizacja zaleznosci np. przez npm audit i/lub wskazanie lokalizacji chrome przez ustawienie zmiennej <code>CHROME_BIN</code></li>
+			<li>Dodatkowo w katalogu coverage mozna znalezc raport nt. pokrycia kodu testami</li>
+			<li>Projekt dziala w trybie wykrywania zmian - kazda zmiana zapisana na dysku powinna powodowac ponowne uruchomienie kodu w przegladarce. Prosze zweryfikowac to zachowanie.</li>
+			<li>Oprocz obserwacji prosze pokazac jak debugowac kod (przy uzyciu narzedzi F12).</li>
+
+			<li>Prosze przygotowac i zademonstrowac konfiguracje testow tak by uruchamiane byly w dodatkowej przegladarce np. firefox  (należy skonfigurowac: karma.config sekcja browsers: + instalacja odpowiedniego modulu <code>karma-xxx-launcher</code> przy pomocy npm. Nalezy zadbac by zaleznosci trafialy do sekcji devDependencies. </li>
+		</ol>
+	</ul>	
+	
+	<h3>II. Struktura projektu w JS, zaleznosci i narzedzia 10%</h3>
+	<ul>
+		<li>Nalezy utworzyc nowy projekt w JS - zainicjowac go w npm.
+		</li> 	
+		<li>W katalogu <code>test</code> umiescic plik <code>SimpleTest.js</code> a w nim:<pre><code>
+			var expect = require('chai').expect;
+
+			describe('canary-tests, function() 
+			{
+				it('should always pass the canary test', function() 
+				{
+					expect(true).to.eql(true);
+				});
+			});</code></pre>	
+		</li>
+		<li>Prosze dodac jako zaleznosci (lokalnie) mocha (frameworki testowy) i chai (biblioteke do asercji). Prosze zadbac zeby zaleznosci znalazly sie na liscie zaleznosci developerskich w pliku konfiguracyjnym (co powinno zostac uzyte: save czy save-dev?)
+		</li> 	
+		<li>Prosze skonfigurowac uruchamianie testow przy pomocy node.js:  <br> 
+			W sekcji directories nalezy dodac <code>"test": "test"</code>, 
+			a w sekcji scripts: wpis <code>"test": "mocha"</code>
+		</li> 	
+	</ul>
+	
+	<h3>III. Testy prototypow/domkniec. 20%</h3>
+	<p>To zadanie prosze zrealizowac w formie kodu podzielonego na kod produkcyjny (domenowy) i testy jednostkowe. Kod powinien uzywac dyrektywy strict. Kod testowany powinien byc odzielony od testow i zawarty w oddzielnych katalogach</p>
+	<ol>	
+		<li>
+			<h4>Emulacja zmiennych prywatnych z wykorzystaniem mechanizmu domkniecia por. przyklad podany na wykladzie.</h4>
+			<ul>
+				<li>Prosze zdefiniowac konstruktor "Pojazd" z atrybutami np. id, max_predkosc, predkosc i interfejsem funkcjami status, start(predkosc), stop()</li>
+				<li>Nastepnie prosze napisac testy weryfikujace dzialanie funkcji oraz test weryfikujacy czy proba zapisu lub/odczytania pol obiektu (np. id,predkosc itd) daje oczekiwany efekt.</li>
+			</ul>
+		</li>
+		<li>
+			<h4>Przetestowac mechanizm prototypow por. przyklad podany na wykladzie.</h4>
+			<ul>
+				<li>Prosze zdefiniowac konstruktor "Pojazd" z atrybutami jak wczesniej, ale umieszczajac funkcje w prototypie konstruktora</li>
+				<li>Nastepnie prosze napisac testy weryfikujace dzialanie funkcji </li>
+				<li>Dodatkowo prosze napisac testy weryfikujacy czy "pola" obiektu sa dostepne (odczyt/zapis) publicznie.</li>
+				<li>Sprawdzic dostepnosc pol prototype/constructor,_prototype.</li>			
+				<li>Sprawdzic jak wplywa dodanie funkcji do prototypu obiektu po stworzeniu obiektu.</li>			
+			</ul>
+		</li>
+	</ol>
+	
+	<h3>IV. Implementacja logiki biznesowej i testow jednostkowych. 35%</h3>
+		<h4>Przygotowac testy i implementacje (przy uzyciu klas JS, bez baz danych itd) prostej logiki biznesowej w wypożyczalni samochodow:</h4>
+		<ol>
+			<li>samochod z atrybutami np. numer, przebieg, liczba_pasazerów, lista_uszkodzen, cena_za_dzien, lista_wypozyczen (i zwrotow)  i interfejsem tj. funkcjami: wypozycz, zwroc, kiedy_dostepny, dodaj_uszkodzenie)</li>
+			<li>
+			
+			wypozyczalnia dla zbioru samochodów(tablica lub iterator), bedzie w stanie odpowiedziec na nast. pytania liczba aktualnie wypozyczonych samochodów, lista dostępnych w okreslonym zakresie czasu, lista najczesciej wypozyczanych (top 10), lista najczesciej uszkadzanych (top 10)</h4>
+			</li>
+		</ol>
+	
+	<h3>V. Konstrukcje języka akceptowane przez node.js/przegladarki. 20% </h3>
+	 <h4>Prosze przygotować kod (można zrobić to w kodzie zadania IV ) uzywający kilku (np 10 :-)) mechanizmów jezyka zdefiniowanych przez pozniejsze standardy jezyka. Pewna wskazowka moze byc lista ponizej.</h4>
+		<ol>
+			<li>klasy (definiowane przez slowo kluczowe class)</li>
+			<li>uproszczona skladnie "strzalkowa" dla funkcji anonimowych</li>
+			<li>zmienne o zasiegu bloku</li>
+			<li>parametry domyslne funkcji</li>
+			<li>przypisania dekomponujace struktury i listy</li>
+			<li>interpolacja napisow</li>
+			<li>parametry "resztkowe"</li>
+			<li>zachowanie this w funkcji zagniezdzonej i => </li>
+			<li>duze inty </li>
+			<li>operator ?. (optional chaining) </li>
+			<li>replaceAll dla stringow </li>
+			<li>separatory w liczbach </li>
+			<li>prywatne akcesory i metody </li>			
+		</ol>
+	<p>
+	<h4>Zainstalowac babael i wybrane presety </h4>
+	<code>npm install --save-dev @babel/core @babel/cli @babel/preset-env</code> <br>
+	<h4>i zaprezentowac wykorzystanie Babel dla wybranych wersji wykonawczej i pokazać różnice w generowanym kodzie</h4>
+	<code>./node_modules/.bin/babel src --out-dir src_env --presets=@babel/env</code> lub <br>
+	<code>npm install -g npx</code>  +  <code>npx src --out-dir src_env --presets=@babel/env</code> <br>
+	
+	<p>Wiecej informacji o użyciu Babel np tu
+	<a href="https://www.tutorialspoint.com/babeljs/babeljs_babel_presets.htm"> presety </a> 
+	i <a href="https://www.tutorialspoint.com/babeljs/babeljs_cli.htm"> CLI </a> oraz
+	 <a href="https://babeljs.io/docs/en/usage"> dokumentacja Babel</a> 
+	</p>
+</body></html>
