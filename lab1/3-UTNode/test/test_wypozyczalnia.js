@@ -4,9 +4,10 @@
 let expect = require('chai').expect;
 let Wypozyczalnia = require('../src/Wypozyczalnia');
 
-var MOCK_SAMOCHOD_NUMER = 0;
+var MOCK_SAMOCHOD_NUMER = 0
+
 class MockSamochod {
-	constructor(wypozyczony, uszkodzenia, wypozyczenia, numer) {
+	constructor(wypozyczony, uszkodzenia=0, wypozyczenia=0, numer=undefined) {
 		this.numer = (numer === undefined) ? MOCK_SAMOCHOD_NUMER++ : numer;
 		this.wypozyczony = wypozyczony;
 		this.uszkodzenia = [];
@@ -118,7 +119,7 @@ describe('Testy wypożyczalni', function() {
 
 
 
-	it('test Wypozyczalnia::dodaj_samochod próba dodania ponownie jużdodanego samochodu', function() {
+	it('test Wypozyczalnia::dodaj_samochod próba dodania ponownie już dodanego samochodu', function() {
 		let w = new Wypozyczalnia();
 		let a = new MockSamochod(true, 0, 0, 0);
 		let b = new MockSamochod(false, 0, 0, 1);

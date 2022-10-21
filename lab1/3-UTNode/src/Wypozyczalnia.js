@@ -59,10 +59,10 @@ module.exports = class {
 		if(this.pobierz(samochod.numer) !== undefined) {
 			for(let i=0; i<this.samochody.length; ++i) {
 				if(this.samochody[i] == samochod) {
-					throw new Error("Samochód: " + samochod.numer + " został już dodany");
+					throw new Error(`Samochód: ${samochod.numer} został już dodany`);
 				}
 			}
-			throw new Error("Samochód z numerem: " + samochod.numer + ", już istnieje");
+			throw new Error(`Samochód z numerem: ${samochod.numer}, już istnieje`);
 		}
 		this.samochody.push(samochod);
 	}

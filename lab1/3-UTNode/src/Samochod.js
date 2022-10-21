@@ -16,9 +16,9 @@ module.exports = class {
 		} else {
 			let last = this.wypozyczenia[this.wypozyczenia.length-1];
 			if(last.end === undefined) {
-				throw new Error("Nie można wypożyczyć samochodu: " + this.numer + ", ponieważ nie został on zwrócony");
+				throw new Error(`Nie można wypożyczyć samochodu: ${this.numer}, ponieważ nie został on zwrócony`);
 			} else if(data <= last.end) {
-				throw new Error("Nie można wypożyczyć samochodu w dacie: " + this.numer + ", w dacie: " + data + ", ponieważ był już wypożyczony później.");
+				throw new Error(`Nie można wypożyczyć samochodu w dacie: ${this.numer}, w dacie: ${data}, ponieważ był już wypożyczony później.`);
 			} else {
 				this.wypozyczenia.push({start:data});
 			}
@@ -27,15 +27,15 @@ module.exports = class {
 	
 	zwroc(data) {
 		if(this.wypozyczenia.length === 0) {
-			throw new Error("Nie można zwrócić samochodu: " + this.numer + ", ponieważ nie został on wyopżyczony.");
+			throw new Error(`Nie można zwrócić samochodu: ${this.numer}, ponieważ nie został on wyopżyczony.`);
 		} else {
 			let last = this.wypozyczenia[this.wypozyczenia.length-1];
 			if(last.end !== undefined) {
-				throw new Error("Nie można zwrócić samochodu: " + this.numer + ", ponieważ nie został on wypożyczony");
+				throw new Error(`Nie można zwrócić samochodu: ${this.numer}, ponieważ nie został on wypożyczony`);
 			} else if(last.start <= data) {
 				last.end = data;
 			} else {
-				throw new Error("Nie można zwrócić samochodu:" + this.numer + ", wcześniej niż był wypożyczony.");
+				throw new Error(`Nie można zwrócić samochodu:${this.numer}, wcześniej niż był wypożyczony.`);
 			}
 		}
 	}
