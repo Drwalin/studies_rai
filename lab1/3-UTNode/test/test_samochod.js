@@ -6,7 +6,7 @@ let Samochod = require('../src/Samochod');
 
 describe('Testy samochodów', function() {
 	it('test Samochod::wypozycz pierwsze wypożyczenie', function() {
-		let s = new Samochod(1, 2, 3);
+		let s = new Samochod(1, 2, 3_000);
 
 		s.wypozycz(1);
 
@@ -16,7 +16,7 @@ describe('Testy samochodów', function() {
 	});
 	
 	it('test Samochod::wypozycz drugie wypożyczenie poprawne', function() {
-		let s = new Samochod(1, 2, 3);
+		let s = new Samochod(1, 2, 1_000);
 		s.wypozycz(1);
 		s.zwroc(2);
 
@@ -31,7 +31,7 @@ describe('Testy samochodów', function() {
 	});
 	
 	it('test Samochod::wypozycz próba wypożyczenia już wypożyczonego samochodu', function() {
-		let s = new Samochod(1, 2, 3);
+		let s = new Samochod(1, 2, 1_000);
 		let data = 13;
 		s.wypozycz(1);
 
@@ -45,7 +45,7 @@ describe('Testy samochodów', function() {
 	});
 	
 	it('test Samochod::wypozycz próba wypożyczenia przed ostatnim zwróceniem', function() {
-		let s = new Samochod(1, 2, 3);
+		let s = new Samochod(1, 2, 2_000);
 		let data = 13;
 		s.wypozycz(1);
 		s.zwroc(2);
@@ -169,6 +169,16 @@ describe('Testy samochodów', function() {
 		expect(s.czy_dostepny(9, 10)).to.eql(false);
 		expect(s.czy_dostepny(10, 10)).to.eql(false);
 		expect(s.czy_dostepny(10, 11)).to.eql(false);
+	});
+	
+	
+	
+	
+	it('test Samochod::constructor automatyczy numer pojazdu', ()=>{
+		let a = new Samochod();
+		let b = new Samochod();
+		
+		expect(a.numer).to.not.eql(b.numer);
 	});
 });
 

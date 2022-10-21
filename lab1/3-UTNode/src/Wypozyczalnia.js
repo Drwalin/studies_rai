@@ -2,14 +2,17 @@
 'use strict';
 
 module.exports = class {
+	
+	#samochody;
+	
 	constructor() {
-		this.samochody = [];
+		this.#samochody = [];
 	}
 	
 	zlicz_wypozyczone(data) {
 		let count = 0;
-		for(let i=0; i<this.samochody.length; ++i) {
-			if(this.samochody[i].czy_wypozyczony(data)) {
+		for(let i=0; i<this.#samochody.length; ++i) {
+			if(this.#samochody[i].czy_wypozyczony(data)) {
 				count++;
 			}
 		}
@@ -18,8 +21,8 @@ module.exports = class {
 
 	zlicz_wolne_w_zakresie(data_start, data_koniec) {
 		let count = 0;
-		for(let i=0; i<this.samochody.length; ++i) {
-			if(this.samochody[i].czy_dostepny(data_start, data_koniec)) {
+		for(let i=0; i<this.#samochody.length; ++i) {
+			if(this.#samochody[i].czy_dostepny(data_start, data_koniec)) {
 				count++;
 			}
 		}
@@ -27,7 +30,7 @@ module.exports = class {
 	}
 	
 	zlicz_najczescie_wypozyczane(limit=10) {
-		let copy = this.samochody.slice(0);
+		let copy = this.#samochody.slice(0);
 		copy.sort((l, r)=>{
 			return r.wypozyczenia.length - l.wypozyczenia.length;
 		});
@@ -37,7 +40,7 @@ module.exports = class {
 	}
 	
 	zlicz_najczescie_uszkadzane(limit=10) {
-		let copy = this.samochody.slice(0);
+		let copy = this.#samochody.slice(0);
 		copy.sort((l, r)=>{
 			return r.uszkodzenia.length - l.uszkodzenia.length;
 		});
@@ -47,9 +50,9 @@ module.exports = class {
 	}
 
 	pobierz(id) {
-		for(let i=0; i<this.samochody.length; ++i) {
-			if(this.samochody[i].numer === id) {
-				return this.samochody[i];
+		for(let i=0; i<this.#samochody.length; ++i) {
+			if(this.#samochody[i].numer === id) {
+				return this.#samochody[i];
 			}
 		}
 		return undefined;
@@ -57,14 +60,14 @@ module.exports = class {
 
 	dodaj_samochod(samochod) {
 		if(this.pobierz(samochod.numer) !== undefined) {
-			for(let i=0; i<this.samochody.length; ++i) {
-				if(this.samochody[i] == samochod) {
+			for(let i=0; i<this.#samochody.length; ++i) {
+				if(this.#samochody[i] == samochod) {
 					throw new Error(`Samochód: ${samochod.numer} został już dodany`);
 				}
 			}
 			throw new Error(`Samochód z numerem: ${samochod.numer}, już istnieje`);
 		}
-		this.samochody.push(samochod);
+		this.#samochody.push(samochod);
 	}
 };
 

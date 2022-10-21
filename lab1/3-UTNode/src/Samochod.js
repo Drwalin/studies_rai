@@ -1,9 +1,11 @@
 
 'use strict';
 
+let SAMOCHOD_GLOBAL_COUNTER = BigInt(1_000_000_000) * BigInt(1_000_000_000) * BigInt(1_000_000_000);
+
 module.exports = class {
 	constructor(numer, pasazerowie, cena) {
-		this.numer = numer;
+		this.numer = numer === undefined ? ++SAMOCHOD_GLOBAL_COUNTER : numer;
 		this.pasazerowie = pasazerowie;
 		this.cena = cena;
 		this.uszkodzenia = [];
@@ -46,12 +48,12 @@ module.exports = class {
 	
 	czy_wypozyczony(data) {
 		for(let i=0; i<this.wypozyczenia.length; ++i) {
-			let e = this.wypozyczenia[i];
-			if(e.end === undefined) {
-				if(e.start <= data) {
+			let {start, end} = this.wypozyczenia[i];
+			if(end === undefined) {
+				if(start <= data) {
 					return true;
 				}
-			} else if(e.start <= data && e.end >= data) {
+			} else if(start <= data && end >= data) {
 				return true;
 			}
 		}
@@ -60,12 +62,12 @@ module.exports = class {
 	
 	czy_dostepny(data_start, data_koniec) {
 		for(let i=0; i<this.wypozyczenia.length; ++i) {
-			let e = this.wypozyczenia[i];
-			if(e.end === undefined) {
-				if(e.start <= data_koniec) {
+			let {start, end} = this.wypozyczenia[i];
+			if(end === undefined) {
+				if(start <= data_koniec) {
 					return false;
 				}
-			} else if(e.start <= data_koniec && e.end >= data_start) {
+			} else if(start <= data_koniec && end >= data_start) {
 				return false;
 			}
 		}
