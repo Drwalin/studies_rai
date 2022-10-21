@@ -1,9 +1,12 @@
-var expect = require('chai').expect;
-var Samochod = require('../src/Samochod');
+
+'use strict';
+
+let expect = require('chai').expect;
+let Samochod = require('../src/Samochod');
 
 describe('Testy samochodów', function() {
 	it('test Samochod::wypozycz pierwsze wypożyczenie', function() {
-		var s = new Samochod(1, 2, 3);
+		let s = new Samochod(1, 2, 3);
 
 		s.wypozycz(1);
 
@@ -13,7 +16,7 @@ describe('Testy samochodów', function() {
 	});
 	
 	it('test Samochod::wypozycz drugie wypożyczenie poprawne', function() {
-		var s = new Samochod(1, 2, 3);
+		let s = new Samochod(1, 2, 3);
 		s.wypozycz(1);
 		s.zwroc(2);
 
@@ -28,8 +31,8 @@ describe('Testy samochodów', function() {
 	});
 	
 	it('test Samochod::wypozycz próba wypożyczenia już wypożyczonego samochodu', function() {
-		var s = new Samochod(1, 2, 3);
-		var data = 13;
+		let s = new Samochod(1, 2, 3);
+		let data = 13;
 		s.wypozycz(1);
 
 		expect(()=>{
@@ -42,8 +45,8 @@ describe('Testy samochodów', function() {
 	});
 	
 	it('test Samochod::wypozycz próba wypożyczenia przed ostatnim zwróceniem', function() {
-		var s = new Samochod(1, 2, 3);
-		var data = 13;
+		let s = new Samochod(1, 2, 3);
+		let data = 13;
 		s.wypozycz(1);
 		s.zwroc(2);
 
@@ -62,7 +65,7 @@ describe('Testy samochodów', function() {
 
 	
 	it('test Samochod::zwroc zwrócenie', function() {
-		var s = new Samochod(1, 2, 3);
+		let s = new Samochod(1, 2, 3);
 		s.wypozycz(1);
 
 		s.zwroc(2);
@@ -74,7 +77,7 @@ describe('Testy samochodów', function() {
 	});
 	
 	it('test Samochod::zwroc zwrócenie tego samego dnia', function() {
-		var s = new Samochod(1, 2, 3);
+		let s = new Samochod(1, 2, 3);
 		s.wypozycz(1);
 
 		s.zwroc(1);
@@ -85,7 +88,7 @@ describe('Testy samochodów', function() {
 	});
 	
 	it('test Samochod::zwroc próba zwrócenia przed wypożyczeniem', function() {
-		var s = new Samochod(1, 2, 3);
+		let s = new Samochod(1, 2, 3);
 		s.wypozycz(2);
 
 		expect(()=>{
@@ -99,7 +102,7 @@ describe('Testy samochodów', function() {
 	});
 	
 	it('test Samochod::zwroc próba zwrócenia nigdy nie wypożyczanego samochodu', function() {
-		var s = new Samochod(1, 2, 3);
+		let s = new Samochod(1, 2, 3);
 
 		expect(()=>{
 			s.zwroc(1);
@@ -107,7 +110,7 @@ describe('Testy samochodów', function() {
 	});
 	
 	it('test Samochod::zwroc próba zwrócenia raz wypożyczonego i zwróconego samochodu', function() {
-		var s = new Samochod(1, 2, 3);
+		let s = new Samochod(1, 2, 3);
 		s.wypozycz(1);
 		s.zwroc(2);
 
@@ -126,7 +129,7 @@ describe('Testy samochodów', function() {
 
 	
 	it('test Samochod::dodaj_uszkodzenie', function() {
-		var s = new Samochod(1, 2, 3);
+		let s = new Samochod(1, 2, 3);
 
 		s.dodaj_uszkodzenie("defekt");
 
@@ -138,15 +141,34 @@ describe('Testy samochodów', function() {
 
 	
 	it('test Samochod::czy_dostepny', function() {
-		var s = new Samochod(1, 2, 3);
-		s.dodaj_uszkodzenie("defekt");
+		let s = new Samochod(1, 2, 3);
+		s.wypozycz(1);
+		s.zwroc(3);
+		s.wypozycz(9);
 
-		throw "";
+		expect(s.czy_dostepny(-1, 0)).to.eql(true);
+		
+		expect(s.czy_dostepny(0, 1)).to.eql(false);
+		expect(s.czy_dostepny(-1, 2)).to.eql(false);
+		expect(s.czy_dostepny(-1, 3)).to.eql(false);
+		expect(s.czy_dostepny(-1, 4)).to.eql(false);
+		expect(s.czy_dostepny(-1, 5)).to.eql(false);
+		expect(s.czy_dostepny(1, 2)).to.eql(false);
+		expect(s.czy_dostepny(1, 3)).to.eql(false);
+		expect(s.czy_dostepny(2, 3)).to.eql(false);
+		expect(s.czy_dostepny(3, 3)).to.eql(false);
+		expect(s.czy_dostepny(3, 4)).to.eql(false);
+		expect(s.czy_dostepny(3, 5)).to.eql(false);
+		
+		expect(s.czy_dostepny(4, 4)).to.eql(true);
+		expect(s.czy_dostepny(4, 5)).to.eql(true);
+		expect(s.czy_dostepny(5, 5)).to.eql(true);
 
-		expect(s.uszkodzenia[0]).to.eql("defekt");
+		expect(s.czy_dostepny(2, 9)).to.eql(false);
+		expect(s.czy_dostepny(4, 10)).to.eql(false);
+		expect(s.czy_dostepny(9, 10)).to.eql(false);
+		expect(s.czy_dostepny(10, 10)).to.eql(false);
+		expect(s.czy_dostepny(10, 11)).to.eql(false);
 	});
-
-
-
 });
 

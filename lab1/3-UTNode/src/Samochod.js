@@ -11,10 +11,10 @@ module.exports = class {
 	}
 
 	wypozycz(data) {
-		if(this.wypozyczenia.length == 0) {
+		if(this.wypozyczenia.length === 0) {
 			this.wypozyczenia.push({start:data});
 		} else {
-			var last = this.wypozyczenia[this.wypozyczenia.length-1];
+			let last = this.wypozyczenia[this.wypozyczenia.length-1];
 			if(last.end === undefined) {
 				throw new Error("Nie można wypożyczyć samochodu: " + this.numer + ", ponieważ nie został on zwrócony");
 			} else if(data <= last.end) {
@@ -26,10 +26,10 @@ module.exports = class {
 	}
 	
 	zwroc(data) {
-		if(this.wypozyczenia.length == 0) {
+		if(this.wypozyczenia.length === 0) {
 			throw new Error("Nie można zwrócić samochodu: " + this.numer + ", ponieważ nie został on wyopżyczony.");
 		} else {
-			var last = this.wypozyczenia[this.wypozyczenia.length-1];
+			let last = this.wypozyczenia[this.wypozyczenia.length-1];
 			if(last.end !== undefined) {
 				throw new Error("Nie można zwrócić samochodu: " + this.numer + ", ponieważ nie został on wypożyczony");
 			} else if(last.start <= data) {
@@ -45,8 +45,8 @@ module.exports = class {
 	}
 	
 	czy_wypozyczony(data) {
-		for(var i=0; i<this.wypozyczenia.length; ++i) {
-			var e = this.wypozyczenia[i];
+		for(let i=0; i<this.wypozyczenia.length; ++i) {
+			let e = this.wypozyczenia[i];
 			if(e.end === undefined) {
 				if(e.start <= data) {
 					return true;
@@ -59,8 +59,8 @@ module.exports = class {
 	}
 	
 	czy_dostepny(data_start, data_koniec) {
-		for(var i=0; i<this.wypozyczenia.length; ++i) {
-			var e = this.wypozyczenia[i];
+		for(let i=0; i<this.wypozyczenia.length; ++i) {
+			let e = this.wypozyczenia[i];
 			if(e.end === undefined) {
 				if(e.start <= data_koniec) {
 					return false;
