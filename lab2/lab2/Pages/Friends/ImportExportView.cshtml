@@ -1,0 +1,22 @@
+﻿@model dynamic
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<h2>Import/export friends from: @ViewBag.user</h2>
+
+<a href="/User/Login?name=@ViewBag.user"> <button>Back</button> </a>
+
+<form action="/Friends/Import" enctype="multipart/form-data" method="post">
+	<label class="custom-uploader" for="file">Json file with friends</label>
+	<input id="file" accept="application/json" name="file" type="file"/>
+	<button class="btn btn-success" name="submit" type="submit">Upload</button>
+	<input type="hidden" value="@ViewBag.user" id="name" name="name">
+</form>
+
+
+<a href="/Friends/Export?name=@ViewBag.user"> <button>Download friends</button> </a>
+
+

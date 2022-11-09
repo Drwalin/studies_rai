@@ -1,0 +1,173 @@
+﻿@model dynamic
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<h2>Logged in: @ViewBag.user.name</h2>
+
+
+<a href="/User/Logout?name=@ViewBag.user.name">
+	<button>
+		Logout
+	</button>
+</a>
+
+<br/>
+
+@if(ViewBag.user.name == "admin") {
+	@Html.ActionLink("Add user", "AddView", "User");
+}
+
+<br/>
+
+<a href="/Friends/AddView/@ViewBag.user.name"> <button>Add friend</button> </a>
+
+<br/>
+
+<a href="/Friends/ImportExportView/@ViewBag.user.name"> <button>Import/export friends</button> </a>
+
+<!--
+<div>
+	<br/>
+	<h4>Friends</h4>
+	<ul id="FriendsList">
+	</ul>
+</div>
+
+<script type="text/javascript">
+
+var LoggedInUserName = "@ViewBag.user.name";
+console.log("Log: " + LoggedInUserName);
+
+function Request(type, addr, func) {
+	var req = new XMLHttpRequest();
+	req.onreadystatechange = function() {
+		if(this.readyState == 4 && this.status == 200) {
+			func(JSON.parse(this.response));
+		}
+	};
+	req.open(type, addr, true);
+	req.send();
+}
+
+Request("GET", "/Friends?name="+LoggedInUserName, function(msg) {
+	console.log(msg);
+	if(msg.friends != undefined) {
+		var home = document.getElementById("FriendsList");
+		var html = "";
+		msg.friends.forEach(function(value) {
+			html += "<li>";
+			html += value;
+			html += "</li>";
+		});
+		home.innerHTML = html;
+	}
+});
+
+</script>
+-->
+
+
+
+
+
+
+
+<div>
+	<br/>
+	<h4>Friends</h4>
+	<ul id="FriendsList">
+	</ul>
+</div>
+
+
+<br/>
+
+<div id="UserDivIdAdmin">
+	<h4>Users</h4>
+	<ul id="UsersList">
+	</ul>
+</div>
+
+<script type="text/javascript">
+
+var LoggedInUserName = "@ViewBag.user.name";
+console.log("Log: " + LoggedInUserName);
+
+if(LoggedInUserName != 'admin') {
+	document.getElementById("UserDivIdAdmin").style.display = 'none';
+}
+
+function Request(type, addr, func) {
+	var req = new XMLHttpRequest();
+	req.onreadystatechange = function() {
+		if(this.readyState == 4 && this.status == 200) {
+			func(JSON.parse(this.response));
+		}
+	};
+	req.open(type, addr, true);
+	req.send();
+}
+
+
+
+function DeleteFriend(name) {
+	Request("PUT", "/Friends/Del/"+LoggedInUserName+"?friend="+name, function(msg) {
+		UserListRequest();
+		FriendsListRequest();
+	});
+}
+
+function FriendsListRequest() {
+	Request("GET", "/Friends?name="+LoggedInUserName, function(msg) {
+		console.log(msg);
+		if(msg.friends != undefined) {
+			var home = document.getElementById("FriendsList");
+			var html = "";
+			msg.friends.forEach(function(value) {
+				html += "<li>";
+				html += value;
+				html += "<button onclick=\"DeleteFriend('"+value+"' )\">Delete</button>";
+				html += "</li>";
+			});
+			home.innerHTML = html;
+		}
+	});
+}
+
+FriendsListRequest();
+
+
+
+function DeleteUser(name) {
+	Request("POST", "/User/Del?admin="+LoggedInUserName+"&name="+name, function(msg) {
+		UserListRequest();
+		FriendsListRequest();
+	});
+}
+
+function UserListRequest() {
+	Request("GET", "/User/List?admin="+LoggedInUserName, function(msg) {
+		console.log(msg);
+		if(msg.users != undefined) {
+			var home = document.getElementById("UsersList");
+			var html = "";
+			msg.users.forEach(function(value) {
+				console.log(value);
+				html += "<li>";
+				if(value != "admin") {
+					html += "<button onclick=\"DeleteUser('"+value+"' )\">Delete</button>";
+				}
+				html += value;
+				html += "</li>";
+			});
+			home.innerHTML = html;
+		}
+	});
+};
+
+UserListRequest();
+
+</script>

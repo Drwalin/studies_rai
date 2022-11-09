@@ -1,0 +1,16 @@
+﻿@model dynamic
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<h2>Add user</h2>
+
+<form id="FormUserAdd" action="/User/Add">
+	<label for="name">Login:</label><br>
+	<input type="text" id="name" name="name" value=""><br>
+	<input type="submit" value="Add user">
+	<input type="hidden" value="admin" id="admin" name="admin">
+</form> 
+

@@ -1,0 +1,15 @@
+﻿@model dynamic
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<h2>Adding friend to: @ViewBag.user</h2>
+
+<form id="FormUserAdd" action="/Friends/Add/@ViewBag.user">
+	<label for="friend">Login:</label><br>
+	<input type="text" id="friend" name="friend" value=""><br>
+	<input type="submit" value="Add friend">
+</form> 
+
