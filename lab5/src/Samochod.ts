@@ -1,6 +1,4 @@
 
-let SAMOCHOD_GLOBAL_COUNTER:number = 1;
-
 export default class Samochod {
 
 	numer: number;
@@ -9,8 +7,8 @@ export default class Samochod {
 	uszkodzenia: String[];
 	wypozyczenia: any[];
 
-	constructor(numer?:number, pasazerowie:number=5, cena:number=5) {
-		this.numer = numer === undefined ? ++SAMOCHOD_GLOBAL_COUNTER : numer;
+	constructor(numer:number, pasazerowie:number=5, cena:number=5) {
+		this.numer = numer;
 		this.pasazerowie = pasazerowie;
 		this.cena = cena;
 		this.uszkodzenia = [];

@@ -1,9 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-let SAMOCHOD_GLOBAL_COUNTER = 1;
 class Samochod {
-    constructor(numer, pasazerowie, cena) {
-        this.numer = numer === undefined ? ++SAMOCHOD_GLOBAL_COUNTER : numer;
+    constructor(numer, pasazerowie = 5, cena = 5) {
+        this.numer = numer;
         this.pasazerowie = pasazerowie;
         this.cena = cena;
         this.uszkodzenia = [];

@@ -3,10 +3,11 @@ import Samochod from '../src/Samochod';
 import Wypozyczalnia from '../src/Wypozyczalnia';
 import { expect } from 'chai';
 
+let GCOUNT = 1000000;
 class MockSamochod extends Samochod {
 	wypozyczony: boolean;
 	constructor(wypozyczony:boolean, uszkodzenia=0, wypozyczenia=0, numer?:number) {
-		super(numer, 5, 0);
+		super(numer===undefined?GCOUNT++:numer, 5, 0);
 		this.wypozyczony = wypozyczony;
 		if(uszkodzenia !== undefined) {
 			for(let i = 0; i < uszkodzenia; ++i) {

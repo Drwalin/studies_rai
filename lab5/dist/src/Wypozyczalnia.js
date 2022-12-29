@@ -1,4 +1,27 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
     if (kind === "m") throw new TypeError("Private method is not writable");
     if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
@@ -12,6 +35,46 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
 };
 var _Wypozyczalnia_samochody;
 Object.defineProperty(exports, "__esModule", { value: true });
+const fs = __importStar(require("fs"));
+class Cache {
+    constructor() {
+        this.ids = new Set();
+        this.elems = new Map();
+        var c = fs.readFileSync('config.txt', 'utf8');
+        this.directory = c.trim();
+        var dirs = fs.promises.readdir(this.directory);
+        dirs.then((value) => {
+            for (var i = 0; i < value.length; ++i) {
+                this.ids.add(+value);
+            }
+        }, null);
+        Promise.all([dirs]);
+    }
+    write(samochod) {
+        if (this.ids.has(samochod.numer) == false) {
+            this.ids.add(samochod.numer);
+        }
+        this.elems.set(samochod.numer, samochod);
+        return fs.promises.writeFile(this.directory + '/' + samochod.numer, JSON.stringify(samochod));
+    }
+    read(id) {
+        if (this.ids.has(id)) {
+            if (this.elems.has(id)) {
+                return Promise.resolve(this.elems.get(id));
+            }
+            else {
+                return fs.promises.readFile(this.directory + '/' + id, 'utf-8').then((data) => {
+                    var s = JSON.parse(data);
+                    if (this.elems.has(id) == false) {
+                        this.elems.set(id, s);
+                    }
+                    return this.elems.get(id);
+                });
+            }
+        }
+        return Promise.reject();
+    }
+}
 class Wypozyczalnia {
     constructor() {
         _Wypozyczalnia_samochody.set(this, void 0);
