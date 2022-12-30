@@ -451,6 +451,128 @@
 					}
 				]
 			}
+		},
+		"/borrows/count_borrowed/{date}": {
+			"get": {
+				"operationId": "CountBorrowed",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "number",
+									"format": "double"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Borrow"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "date",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/borrows/count_free/{date}/{dateend}": {
+			"get": {
+				"operationId": "CountFree",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "number",
+									"format": "double"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Borrow"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "date",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "path",
+						"name": "dateend",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/borrows/frequent_borrow": {
+			"get": {
+				"operationId": "FrequentBorrow",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/Samochod"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Borrow"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/borrows/frequent_defect": {
+			"get": {
+				"operationId": "FrequentDefect",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/Samochod"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Borrow"
+				],
+				"security": [],
+				"parameters": []
+			}
 		}
 	},
 	"servers": [

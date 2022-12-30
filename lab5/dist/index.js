@@ -10,7 +10,7 @@ const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const Cache_1 = __importDefault(require("./src/Cache"));
 const Wypozyczalnia_1 = require("./src/Wypozyczalnia");
 const CarController_1 = __importDefault(require("./src/CarController"));
-//import CreateBorrowController from "./src/BorrowController.ts.ignore";
+const BorrowController_1 = __importDefault(require("./src/BorrowController"));
 const cache = new Cache_1.default();
 const wypozyczalnia = new Wypozyczalnia_1.WypozyczalniaAsync(cache);
 const PORT = process.env.PORT || 8000;
@@ -25,7 +25,7 @@ app.use("/docs", swagger_ui_express_1.default.serve, swagger_ui_express_1.defaul
 }));
 const Router = express_1.default.Router();
 Router.use("/cars", (0, CarController_1.default)(cache));
-//Router.use("/borrow", CreateBorrowController(wypozyczalnia));
+Router.use("/borrows", (0, BorrowController_1.default)(wypozyczalnia));
 app.use(Router);
 app.listen(PORT, () => {
     console.log("Server is running on port", PORT);

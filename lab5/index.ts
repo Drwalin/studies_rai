@@ -9,7 +9,7 @@ import { WypozyczalniaAsync } from "./src/Wypozyczalnia";
 import Samochod from "./src/Samochod";
 
 import CreateCarController from "./src/CarController";
-//import CreateBorrowController from "./src/BorrowController.ts.ignore";
+import CreateBorrowController from "./src/BorrowController";
 
 const cache = new Cache();
 const wypozyczalnia = new WypozyczalniaAsync(cache);
@@ -35,7 +35,7 @@ app.use(
 
 const Router = express.Router();
 Router.use("/cars", CreateCarController(cache));
-//Router.use("/borrow", CreateBorrowController(wypozyczalnia));
+Router.use("/borrows", CreateBorrowController(wypozyczalnia));
 app.use(Router);
 
 app.listen(PORT, () => {
