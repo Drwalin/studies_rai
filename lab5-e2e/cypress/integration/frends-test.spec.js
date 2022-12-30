@@ -56,6 +56,7 @@ describe('Test friends', ()=> {
 
 		cy.get('button#remove_friend_'+userB);
 	});
+
 	it('Test second friend has first friend', ()=>{
 		cy.login(userA);
 		cy.get('button#add_friend').click();
