@@ -34,8 +34,7 @@ describe('Test friends', ()=> {
 		cy.delete_user(userB);
 		cy.visit(URL);
 	})
-
-
+	
 	it('Test is new user logged in', ()=>{
 		// Act
 		cy.login(userA);
@@ -91,8 +90,15 @@ describe('Test friends', ()=> {
 		cy.login(userA);
 
 		// Act
+		/*
+		cy.request("POST", URL+'/Friends/Import', {
+			name: userA,
+			body: '{"friends":["userb"]}'
+		});
+		*/
 		cy.get('button#import_export_friends').click();
 		cy.get('input#file').attachFile(['friends.json']);
+		cy.get('input[type="submit"]').click();
 
 		// Assert
 		cy.login(userA);
@@ -113,7 +119,6 @@ describe('Test friends', ()=> {
 		cy.readFile('cypress/fixtures/Download/friends.json').its('friends').should('include', userB);
 		cy.readFile('cypress/fixtures/Download/friends.json').its('friends').should('lengthOf', 1);
 	});
-
 
 
 
