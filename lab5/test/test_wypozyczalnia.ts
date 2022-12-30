@@ -1,6 +1,6 @@
 
 import Samochod from '../src/Samochod';
-import Wypozyczalnia from '../src/Wypozyczalnia';
+import {Wypozyczalnia} from '../src/Wypozyczalnia';
 import { expect } from 'chai';
 
 let GCOUNT = 1000000;

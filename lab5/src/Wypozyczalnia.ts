@@ -1,100 +1,155 @@
 
 import Samochod from './Samochod';
-import * as fs from 'fs';
+import Cache from './Cache';
 
-class Cache {
+let DEBUG = (x:any) => {
+	console.log("Debug   ", x);
+};
 
-	ids: Set<number> = new Set();
-	elems: Map<number, Samochod> = new Map();
-
-	directory: string;
-
-	constructor() {
-		var c:string = fs.readFileSync('config.txt', 'utf8');
-		this.directory = c.trim();
-		var dirs = fs.promises.readdir(this.directory);
-		dirs.then((value:string[])=>{
-			for(var i=0; i<value.length; ++i) {
-				this.ids.add(+value);
-			}
-		}, null);
-		Promise.all([dirs]);
-	}
-
-	write(samochod:Samochod) {
-		if(this.ids.has(samochod.numer) == false) {
-			this.ids.add(samochod.numer);
-		}
-		this.elems.set(samochod.numer, samochod);
-		return fs.promises.writeFile(this.directory+'/'+samochod.numer, JSON.stringify(samochod));
-	}
-
-	read(id:number):Promise<Samochod|undefined> {
-		if(this.ids.has(id)) {
-			if(this.elems.has(id)) {
-				return Promise.resolve(this.elems.get(id));
-			} else {
-				return fs.promises.readFile(this.directory+'/'+id, 'utf-8').then(
-					(data:string)=>{
-						var s = JSON.parse(data) as Samochod;
-						if(this.elems.has(id) == false) {
-							this.elems.set(id, s);
-						}
-						return this.elems.get(id);
-					}
-				);
-			}
-		}
-		return Promise.reject();
-	}
-	
-	get_available_ids():number[] {
-		var ret:number[] = [];
-		this.ids.forEach((v)=>{
-			ret.push(v);
-		});
-		return ret;
-	}
-}
-
-export default class Wypozyczalnia2 {
+export class WypozyczalniaAsync {
 	
 	cache: Cache;
 	
 	constructor(cache:Cache) {
 		this.cache = cache;
 	}
-	
-	zlicz_wypozyczone(data:number):Promise<number> {
+
+
+	async zlicz_wypozyczone(data:number):Promise<number> {
 		let count = 0;
-		let i = 0;
-		var promise = Promise.resolve(0);
-		var promises = [promise];
-		this.cache.get_available_ids().forEach((v)=>{
-			promises[0] = promises[0].then((v)=>{
-				if()
-			});
-		});
-		for(let i=0; i<ids.le; ++i) {
-			if(this.#samochody[i].czy_wypozyczony(data)) {
+		var cars:Samochod[] = await this.cache.get_all();
+		for(let i=0; i<cars.length; ++i) {
+			if(cars[i].czy_wypozyczony(data)) {
 				count++;
 			}
 		}
 		return count;
 	}
 
-	zlicz_wolne_w_zakresie(data_start:number, data_koniec:number):number {
+	async zlicz_wolne_w_zakresie(data_start:number, data_koniec:number):Promise<number> {
 		let count = 0;
-		for(let i=0; i<this.#samochody.length; ++i) {
-			if(this.#samochody[i].czy_dostepny(data_start, data_koniec)) {
+		var cars:Samochod[] = await this.cache.get_all();
+		for(let i=0; i<cars.length; ++i) {
+			if(cars[i].czy_dostepny(data_start, data_koniec)) {
 				count++;
 			}
 		}
 		return count;
 	}
 	
-	zlicz_najczescie_wypozyczane(limit:number=10):Samochod[] {
-		let copy = this.#samochody.slice(0);
+	async zlicz_najczescie_wypozyczane(limit:number=10):Promise<Samochod[]> {
+		var copy:Samochod[] = await this.cache.get_all();
+		copy.sort((l, r)=>{
+			return r.wypozyczenia.length - l.wypozyczenia.length;
+		});
+		if(limit < copy.length)
+			limit = copy.length;
+		return copy.slice(0, limit-1);
+	}
+	
+	async zlicz_najczescie_uszkadzane(limit:number=10):Promise<Samochod[]> {
+		var copy:Samochod[] = await this.cache.get_all();
+		copy.sort((l, r)=>{
+			return r.uszkodzenia.length - l.uszkodzenia.length;
+		});
+		if(limit < copy.length)
+			limit = copy.length;
+		return copy.slice(0, limit-1);
+	}
+
+	async pobierz(id:number):Promise<Samochod|undefined> {
+		return this.cache.read(id);
+	}
+
+	async dodaj_samochod(samochod:Samochod) {
+		if(this.cache.has(samochod.numer)) {
+			throw new Error(`Samochód z numerem: ${samochod.numer}, już istnieje`);
+		}
+		return this.cache.write(samochod);
+	}
+
+	async clear() {
+		return this.cache.remove_all();
+	}
+	
+	
+
+
+
+
+
+	/*
+	zlicz_wypozyczone(data:number):Promise<number> {
+		let count = 0;
+		var promise = Promise.resolve(0);
+		var ar = this.cache.get_available_ids();
+		for(var i=0; i<ar.length; ++i) {
+			promise = promise.then((v)=>{
+				var p =this.cache.read(ar[i]);
+				p.then((s)=>{
+					if(s === undefined) {
+					} else if(s?.czy_wypozyczony(data)) {
+						v++;
+					}
+				});
+				Promise.all([p]);
+				return v;
+			});
+		}
+		return promise;
+	}
+	
+	async zlicz_wypozyczone(data:number):Promise<number> {
+		var count:number = 0;
+		var ar = this.cache.get_available_ids();
+		for(var i=0; i<ar.length; ++i) {
+			var s:Samochod|undefined = await this.cache.read(ar[i]);
+			if(s === undefined) {
+			} else if(s?.czy_wypozyczony(data)) {
+				count++;
+			}
+		}
+		return count;
+	}
+	*/
+
+	/*
+	async zlicz_wypozyczone(data:number):Promise<number> {
+		var count:number = 0;
+		var ar = this.cache.get_available_ids();
+		for(var i=0; i<ar.length; ++i) {
+			var s:Samochod|undefined = await this.cache.read(ar[i]);
+			if(s === undefined) {
+			} else if(s?.czy_wypozyczony(data)) {
+				count++;
+			}
+		}
+		return count;
+	}
+
+	async zlicz_wolne_w_zakresie(data_start:number, data_koniec:number):Promise<number> {
+		var count:number = 0;
+		var ar = this.cache.get_available_ids();
+		for(var i=0; i<ar.length; ++i) {
+			var s:Samochod|undefined = await this.cache.read(ar[i]);
+			if(s === undefined) {
+			} else if(s?.czy_dostepny(data_start, data_koniec)) {
+				count++;
+			}
+		}
+		return count;
+	}
+	
+	async zlicz_najczescie_wypozyczane(limit:number=10):Promise<Samochod[]> {
+		var copy:Samochod[] = [];
+		var ar = this.cache.get_available_ids();
+		for(var i=0; i<ar.length; ++i) {
+			var s:Samochod|undefined = await this.cache.read(ar[i]);
+			if(s === undefined) {
+			} else {
+				copy.push(s);
+			}
+		}
 		copy.sort((l, r)=>{
 			return r.wypozyczenia.length - l.wypozyczenia.length;
 		});
@@ -104,7 +159,19 @@ export default class Wypozyczalnia2 {
 	}
 	
 	zlicz_najczescie_uszkadzane(limit:number=10):Samochod[] {
-		let copy = this.#samochody.slice(0);
+		var copy:Samochod[] = [];
+		var ar = this.cache.get_available_ids();
+		for(var i=0; i<ar.length; ++i) {
+			var s:Samochod|undefined = await this.cache.read(ar[i]);
+			if(s === undefined) {
+			} else {
+				copy.push(s);
+			}
+		}
+
+
+
+
 		copy.sort((l, r)=>{
 			return r.uszkodzenia.length - l.uszkodzenia.length;
 		});
@@ -112,7 +179,9 @@ export default class Wypozyczalnia2 {
 			limit = copy.length;
 		return copy.slice(0, limit-1);
 	}
+	*/
 
+	/*
 	pobierz(id:number):Samochod|undefined {
 		for(let i=0; i<this.#samochody.length; ++i) {
 			if(this.#samochody[i].numer === id) {
@@ -133,9 +202,76 @@ export default class Wypozyczalnia2 {
 		}
 		this.#samochody.push(samochod);
 	}
+	*/
 };
 
-export default class Wypozyczalnia {
+/*
+export class WypozyczalniaAsyncWrapper {
+
+	wyp: WypozyczalniaAsync;
+
+	constructor() {
+		DEBUG(11);
+		this.wyp = new WypozyczalniaAsync(new Cache());
+		this.clear();
+		DEBUG(12);
+	}
+
+	zlicz_wypozyczone(data:number):number {
+		DEBUG(13);
+		var ret: number=0;
+		Promise.all([this.wyp.zlicz_wypozyczone(data).then((v)=>{ret = v;})]);
+		DEBUG(14);
+		return ret;
+	}
+
+	zlicz_wolne_w_zakresie(data_start:number, data_koniec:number):number {
+		DEBUG(15);
+		var ret: number=0;
+		Promise.all([this.wyp.zlicz_wolne_w_zakresie(data_start, data_koniec).then((v)=>{ret = v;})]);
+		DEBUG(16);
+		return ret;
+	}
+	
+	zlicz_najczescie_wypozyczane(limit:number=10):Samochod[] {
+		DEBUG(17);
+		var ret: Samochod[] = [];
+		Promise.all([this.wyp.zlicz_najczescie_wypozyczane(limit).then((v)=>{ret = v;})]);
+		DEBUG(18);
+		return ret;
+	}
+	
+	zlicz_najczescie_uszkadzane(limit:number=10):Samochod[] {
+		DEBUG(19);
+		var ret: Samochod[] = [];
+		Promise.all([this.wyp.zlicz_najczescie_uszkadzane(limit).then((v)=>{ret = v;})]);
+		DEBUG(110);
+		return ret;
+	}
+
+	pobierz(id:number):Samochod|undefined {
+		DEBUG(111);
+		var ret: Samochod|undefined;
+		Promise.all([this.wyp.pobierz(id).then((v)=>{ret = v;})]);
+		DEBUG(112);
+		return ret;
+	}
+
+	dodaj_samochod(samochod:Samochod) {
+		DEBUG(113);
+		this.wyp.dodaj_samochod(samochod);
+		DEBUG(114);
+	}
+
+	clear() {
+		DEBUG(115);
+		this.wyp.clear();
+		DEBUG(116);
+	}
+}
+*/
+
+export class Wypozyczalnia {
 	
 	#samochody: Samochod[];
 	
