@@ -1,27 +1,21 @@
 const URL = 'https://localhost:7292';
 
-function HasElement(predicate1, predicate) {
-	return cy.get(predicate1).find(predicate).length > 0;
-}
-
 Cypress.Commands.add('login', (username) => {
 	cy.visit(URL);
-	cy.get('#name').type(username);
-	cy.get('#submit_login').click();
+	cy.get('input#name').type(username);
+	cy.get('input#submit_login').click();
 });
 
 Cypress.Commands.add('delete_user', (username) => {
-	cy.login('admin');
-	//if(HasElement('#UserDivIdAdmin', 'button#delete_'+username)) {
-		cy.get('button#delete_'+username).click();
-	//}
+	//cy.visit(URL+'/User/Del?admin=admin&name='+username);
+	cy.downloadFile(URL+'/User/Del?admin=admin&name='+username, 'cypress/fixtures/Download/Tmp', 'friends.json');
 });
 
 Cypress.Commands.add('add_user', (username) => {
-	//cy.delete_user(username);
+	cy.delete_user(username);
 	cy.visit(URL + '/User/AddView');
-	cy.get('#name').type(username);
-	cy.get('#submit_add_user').click();
+	cy.get('input#name').type(username);
+	cy.get('input#submit_add_user').click();
 });
 
 const userA = 'usera';
@@ -41,43 +35,85 @@ describe('Test friends', ()=> {
 		cy.visit(URL);
 	})
 
-	it('Test is logged in', ()=>{
+
+	it('Test is new user logged in', ()=>{
+		// Act
 		cy.login(userA);
 
+		// Assert
 		cy.get('main h2').should('have.html', 'Logged in: ' + userA);
 	});
 
 	it('Test add friend', ()=>{
+		// Arrange
 		cy.login(userA);
 
+		// Act
 		cy.get('button#add_friend').click();
 		cy.get('input#friend').type(userB);
 		cy.get('input#submit_add').click();
 
+		// Assert
 		cy.get('button#remove_friend_'+userB);
 	});
 
 	it('Test second friend has first friend', ()=>{
+		// Arrange
 		cy.login(userA);
 		cy.get('button#add_friend').click();
 		cy.get('input#friend').type(userB);
 		cy.get('input#submit_add').click();
 
+		// Act
 		cy.login(userB);
 
+		// Assert
 		cy.get('button#remove_friend_'+userA);
 	});
 
 	it('Test remove friend', ()=>{
+		// Arrange
 		cy.login(userA);
 		cy.get('button#add_friend').click();
 		cy.get('input#friend').type(userB);
 		cy.get('input#submit_add').click();
 
+		// Act
 		cy.login(userA);
 		cy.get('button#remove_friend_'+userB).click();
-		cy.get('button#remove_friend_'+userA).should('not.exist');
+
+		// Assert
+		cy.get('button#remove_friend_'+userB).should('not.exist');
 	});
+
+	it('Test upload friends list', ()=>{
+		// Arrange
+		cy.login(userA);
+
+		// Act
+		cy.get('button#import_export_friends').click();
+		cy.get('input#file').attachFile(['friends.json']);
+
+		// Assert
+		cy.login(userA);
+		cy.get('button#remove_friend_'+userB);
+	});
+
+	it('Test download friends list', ()=>{
+		// Arrange
+		cy.login(userA);
+		cy.get('button#add_friend').click();
+		cy.get('input#friend').type(userB);
+		cy.get('input#submit_add').click();
+
+		// Act
+		cy.downloadFile(URL+'/Friends/Export?name='+userA, 'cypress/fixtures/Download', 'friends.json');
+
+		// Assert
+		cy.readFile('cypress/fixtures/Download/friends.json').its('friends').should('include', userB);
+		cy.readFile('cypress/fixtures/Download/friends.json').its('friends').should('lengthOf', 1);
+	});
+
 
 
 
