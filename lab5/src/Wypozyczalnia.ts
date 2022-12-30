@@ -72,6 +72,9 @@ export class WypozyczalniaAsync {
 		return this.cache.remove_all();
 	}
 	
+	async update(samochod: Samochod) {
+		return this.cache.write(samochod);
+	}
 	
 
 

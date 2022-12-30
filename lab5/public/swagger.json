@@ -1,0 +1,375 @@
+{
+	"components": {
+		"examples": {},
+		"headers": {},
+		"parameters": {},
+		"requestBodies": {},
+		"responses": {},
+		"schemas": {
+			"ICar": {
+				"properties": {
+					"numer": {
+						"type": "number",
+						"format": "double"
+					},
+					"pasazerowie": {
+						"type": "number",
+						"format": "double"
+					},
+					"cena": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"numer",
+					"pasazerowie",
+					"cena"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Samochod": {
+				"properties": {
+					"numer": {
+						"type": "number",
+						"format": "double"
+					},
+					"pasazerowie": {
+						"type": "number",
+						"format": "double"
+					},
+					"cena": {
+						"type": "number",
+						"format": "double"
+					},
+					"uszkodzenia": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"wypozyczenia": {
+						"items": {},
+						"type": "array"
+					}
+				},
+				"required": [
+					"numer",
+					"pasazerowie",
+					"cena",
+					"uszkodzenia",
+					"wypozyczenia"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IDescription": {
+				"properties": {
+					"desc": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"desc"
+				],
+				"type": "object",
+				"additionalProperties": false
+			}
+		},
+		"securitySchemes": {}
+	},
+	"info": {
+		"title": "lab5",
+		"version": "1.0.0",
+		"license": {
+			"name": "ISC"
+		},
+		"contact": {}
+	},
+	"openapi": "3.0.0",
+	"paths": {
+		"/cars": {
+			"post": {
+				"operationId": "Create",
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"tags": [
+					"Car"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ICar"
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"operationId": "ReadAll",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/Samochod"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Car"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/cars/{id}": {
+			"get": {
+				"operationId": "Read",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"allOf": [
+										{
+											"$ref": "#/components/schemas/Samochod"
+										}
+									],
+									"nullable": true
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Car"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"delete": {
+				"operationId": "Delete",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Car"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/cars/update": {
+			"post": {
+				"operationId": "Update",
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"tags": [
+					"Car"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ICar"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/cars/all": {
+			"delete": {
+				"operationId": "DeleteAll",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "boolean"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Car"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/cars/borrow/{id}/{date}": {
+			"post": {
+				"operationId": "Borrow",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "boolean"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Car"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "path",
+						"name": "date",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/cars/return/{id}/{date}": {
+			"post": {
+				"operationId": "Return",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "boolean"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Car"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "path",
+						"name": "date",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/cars/defect/{id}": {
+			"post": {
+				"operationId": "Defect",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "boolean"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Car"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IDescription"
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"servers": [
+		{
+			"url": "/"
+		}
+	]
+}

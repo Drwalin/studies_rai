@@ -42,7 +42,11 @@ export default class Cache {
 			} else {
 				return fs.promises.readFile(this.get_path(id), 'utf-8').then(
 					(data:string)=>{
-						var s = JSON.parse(data) as Samochod;
+						var a = JSON.parse(data) as Samochod;
+						var s:Samochod = new Samochod(a.numer, a.pasazerowie, a.cena);
+						s.uszkodzenia = a.uszkodzenia;
+						s.wypozyczenia = a.wypozyczenia;
+
 						if(this.elems.has(id) == false) {
 							this.elems.set(id, s);
 						}
