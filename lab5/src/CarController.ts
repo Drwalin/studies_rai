@@ -110,6 +110,27 @@ class CarController {
 			return Promise.resolve(true);
 		});
 	}
+
+
+	@Get("/borrowed/:id/:date")
+	public async IsBorrowed(@Path() id: string, @Path() date: string): Promise<boolean> {
+		return this.cache.read(+id).then((s) => {
+			if (s === undefined) {
+				return Promise.reject();
+			}
+			return Promise.resolve(s?.czy_wypozyczony(+date));
+		});
+	}
+
+	@Get("/available/:id/:date/:dateend")
+	public async IsAvailable(@Path() id: string, @Path() date: string, @Path() dateend: string): Promise<boolean> {
+		return this.cache.read(+id).then((s) => {
+			if (s === undefined) {
+				return Promise.reject();
+			}
+			return Promise.resolve(s?.czy_dostepny(+date, +dateend));
+		});
+	}
 }
 
 const CreateCarController = function (cache: Cache) {
@@ -190,6 +211,24 @@ const CreateCarController = function (cache: Cache) {
 		try {
 			const co = new CarController(cache);
 			const r = await co.Defect(req.params.id, req.body);
+			return res.send(r);
+		} catch {
+			return res.sendStatus(500);
+		}
+	});
+	router.get("/borrowed/:id/:date", async (req, res) => {
+		try {
+			const co = new CarController(cache);
+			const r = await co.IsBorrowed(req.params.id, req.params.date);
+			return res.send(r);
+		} catch {
+			return res.sendStatus(500);
+		}
+	});
+	router.get("/available/:id/:date/:dateend", async (req, res) => {
+		try {
+			const co = new CarController(cache);
+			const r = await co.IsAvailable(req.params.id, req.params.date, req.params.dateend);
 			return res.send(r);
 		} catch {
 			return res.sendStatus(500);
