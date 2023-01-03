@@ -6,7 +6,7 @@ public class UserService {
 	public UserService(UserRepository userRepository) {
 		this.userRepository = userRepository;
 	}
-	
+
 
 	public UserEntity? FindById(int id) {
 		return userRepository.FindById(id);
@@ -15,7 +15,7 @@ public class UserService {
 	public UserEntity? FindByUsername(string username) {
 		return userRepository.FindByUsername(username);
 	}
-	
+
 	public void Create(UserEntity user) {
 		userRepository.Create(user);
 	}
@@ -31,5 +31,4 @@ public class UserService {
 	public void Delete(UserEntity user) {
 		userRepository.Delete(user);
 	}
-
 }

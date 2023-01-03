@@ -11,19 +11,20 @@ public class UserStopRepository {
 		if(FindByUserAndStop(stop.user, stop.stopId) != null) {
 			return;
 		}
+
 		dbContext.userStops.Add(stop);
 		dbContext.SaveChanges();
 	}
-	
+
 	public UserStopEntity? FindById(int id) {
 		return dbContext.userStops.FirstOrDefault(s => s.id == id);
 	}
 
 	public UserStopEntity? FindByUserAndStop(UserEntity user, int stopId) {
-		return dbContext.userStops.Where(s =>
-			s.user.id == user.id && s.stopId == stopId).FirstOrDefault();
+		return dbContext.userStops.FirstOrDefault(s =>
+			s.user.id == user.id && s.stopId == stopId);
 	}
-	
+
 	public List<UserStopEntity> FindAllByUser(UserEntity user) {
 		return dbContext.userStops.Where(s => s.user.id == user.id).ToList();
 	}

@@ -12,7 +12,8 @@ public class LoginController : ControllerBase {
 	private readonly UserService userService;
 	private readonly AuthorizationService authorizationService;
 
-	public LoginController(UserService userService, AuthorizationService authorizationService) {
+	public LoginController(UserService userService,
+		AuthorizationService authorizationService) {
 		this.userService = userService;
 		this.authorizationService = authorizationService;
 	}
@@ -32,7 +33,7 @@ public class LoginController : ControllerBase {
 
 		return new JsonResult(new LoginResponse() {
 			username = user.username,
-			id =user.id,
+			id = user.id,
 			token = "Bearer " + authorizationService.GenerateToken(req.username)
 		});
 	}

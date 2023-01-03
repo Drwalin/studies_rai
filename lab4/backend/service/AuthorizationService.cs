@@ -17,7 +17,6 @@ public class AuthorizationService {
 	}
 
 	public string GenerateToken(string username) {
-		var securityKey = AuthorizationService.securityKey;
 		var credentials =
 			new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 

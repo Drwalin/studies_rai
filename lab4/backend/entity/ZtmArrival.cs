@@ -3,15 +3,15 @@ namespace Ztm;
 public class ZtmArrival
 {
     public string id { get; set; }
-    public int DelayInSeconds { get; set; }
-    public string EstimatedTime { get; set; }
-    public string Headsign { get; set; }
-    public int RouteId { get; set; }
-    public int TripId { get; set; }
-    public string Status { get; set; }
-    public string TheoreticalTime { get; set; }
-    public string Timestamp { get; set; }
-    public int Trip { get; set; }
-    public int VehicleCode { get; set; }
-    public int VehicleId { get; set; }
+    public int delayInSeconds { get; set; }
+    public string estimatedTime { get; set; }
+    public string headsign { get; set; }
+    public int routeId { get; set; }
+    public int tripId { get; set; }
+    public string status { get; set; }
+    public string theoreticalTime { get; set; }
+    public string timestamp { get; set; }
+    public int trip { get; set; }
+    public int vehicleCode { get; set; }
+    public int vehicleId { get; set; }
 }

@@ -15,40 +15,40 @@ class Program {
 		var builder = WebApplication.CreateBuilder(args);
 
 		builder.Services.AddControllers();
-		builder.Services.AddEndpointsApiExplorer();
-		builder.Services.AddSwaggerGen(c => {
-			c.SwaggerDoc("v1", new OpenApiInfo {
-				Title = "JWTToken_Auth_API", Version = "v1"
-			});
-			c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme() {
-				Name = "Authorization",
-				Type = SecuritySchemeType.ApiKey,
-				Scheme = "Bearer",
-				BearerFormat = "JWT",
-				In = ParameterLocation.Header,
-				Description =
-					"JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 1safsfsdfdfd\"",
-			});
-			c.AddSecurityRequirement(new OpenApiSecurityRequirement {
-				{
-					new OpenApiSecurityScheme {
-						Reference = new OpenApiReference {
-							Type = ReferenceType.SecurityScheme,
-							Id = "Bearer"
-						}
-					},
-					new string[] { }
-				}
-			});
-		})
-		.AddDbContext<ZtmDbContext>()
-		.AddScoped<UserRepository>();
-		builder.Services.AddScoped<UserStopRepository>();
-		builder.Services.AddScoped<StopService>();
-		builder.Services.AddScoped<UserService>();
-		builder.Services.AddScoped<UserStopService>();
-		builder.Services.AddScoped<AuthorizationService>();
-		builder.Services
+		builder.Services.AddEndpointsApiExplorer()
+			.AddSwaggerGen(c => {
+				c.SwaggerDoc("v1", new OpenApiInfo {
+					Title = "JWTToken_Auth_API", Version = "v1"
+				});
+				c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme() {
+					Name = "Authorization",
+					Type = SecuritySchemeType.ApiKey,
+					Scheme = "Bearer",
+					BearerFormat = "JWT",
+					In = ParameterLocation.Header,
+					Description =
+						"JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 1safsfsdfdfd\"",
+				});
+				c.AddSecurityRequirement(new OpenApiSecurityRequirement {
+					{
+						new OpenApiSecurityScheme {
+							Reference = new OpenApiReference {
+								Type = ReferenceType.SecurityScheme,
+								Id = "Bearer"
+							}
+						},
+						new string[] { }
+					}
+				});
+			})
+			.AddDbContext<ZtmDbContext>()
+			.AddScoped<UserRepository>()
+			.AddScoped<UserStopRepository>()
+			.AddScoped<StopService>()
+			.AddScoped<UserService>()
+			.AddScoped<UserStopService>()
+			.AddScoped<AuthorizationService>()
+
 			.AddAuthentication(options => {
 				options.DefaultAuthenticateScheme =
 					JwtBearerDefaults.AuthenticationScheme;
@@ -73,10 +73,10 @@ class Program {
 		builder.Services.AddMvc();
 
 		var app = builder.Build();
-		app.UseAuthentication();
-		app.UseAuthorization();
-		app.UseSwagger();
-		app.UseSwaggerUI();
+		app.UseAuthentication()
+			.UseAuthorization()
+			.UseSwagger()
+			.UseSwaggerUI();
 		app.MapControllers();
 		app.Services.GetService<ZtmDbContext>().Database.EnsureCreated();
 

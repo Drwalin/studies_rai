@@ -2,11 +2,9 @@ namespace Ztm;
 
 public class UserRepository {
 	private readonly ZtmDbContext dbContext;
-	private readonly UserStopRepository userStopRepository;
 
-	public UserRepository(ZtmDbContext dbContext, UserStopRepository userStopRepository) {
+	public UserRepository(ZtmDbContext dbContext) {
 		this.dbContext = dbContext;
-		this.userStopRepository = userStopRepository;
 	}
 
 	public void Create(UserEntity user) {

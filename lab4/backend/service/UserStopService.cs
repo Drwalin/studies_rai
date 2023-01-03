@@ -6,7 +6,7 @@ public class UserStopService {
 	public UserStopService(UserStopRepository userStopRepository) {
 		this.userStopRepository = userStopRepository;
 	}
-	
+
 	public void AddUserStop(UserStopEntity stop) {
 		userStopRepository.Create(stop);
 	}
@@ -16,8 +16,7 @@ public class UserStopService {
 	}
 
 	public UserStopEntity? FindByStopIdAndUser(int stopId, UserEntity user) {
-		return userStopRepository.FindAllByUser(user)
-			.Where(us => us.stopId == stopId).First();
+		return userStopRepository.FindByUserAndStop(user, stopId);
 	}
 
 	public void RemoveUserStop(UserStopEntity stop) {
