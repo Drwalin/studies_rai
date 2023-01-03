@@ -9,12 +9,15 @@ public class AuthorizationService {
 
 	private readonly UserService userService;
 
+	public static SymmetricSecurityKey securityKey =
+		new(RandomKey.GenerateKey());
+
 	public AuthorizationService(UserService userService) {
 		this.userService = userService;
 	}
 
 	public string GenerateToken(string username) {
-		var securityKey = new SymmetricSecurityKey(Program.KEY);//RandomKey.GenerateKey());
+		var securityKey = AuthorizationService.securityKey;
 		var credentials =
 			new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 

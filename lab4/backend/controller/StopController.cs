@@ -1,6 +1,4 @@
-﻿using System.Net;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ztm;
@@ -8,15 +6,12 @@ namespace Ztm;
 [ApiController]
 public class StopController : ControllerBase {
     private readonly StopService stopService;
-    private readonly UserService userService;
     private readonly UserStopService userStopService;
 	private readonly AuthorizationService authorizationService;
 
     public StopController(StopService stopService,
-        UserService userService,
         UserStopService userStopService, AuthorizationService authorizationService) {
         this.stopService = stopService;
-        this.userService = userService;
         this.userStopService = userStopService;
         this.authorizationService = authorizationService;
     }

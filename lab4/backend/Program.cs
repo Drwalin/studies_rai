@@ -40,18 +40,14 @@ class Program {
 					new string[] { }
 				}
 			});
-		});
-
-		builder.Services.AddDbContext<ZtmDbContext>();
-
-		builder.Services.AddScoped<UserRepository>();
+		})
+		.AddDbContext<ZtmDbContext>()
+		.AddScoped<UserRepository>();
 		builder.Services.AddScoped<UserStopRepository>();
-
 		builder.Services.AddScoped<StopService>();
 		builder.Services.AddScoped<UserService>();
 		builder.Services.AddScoped<UserStopService>();
 		builder.Services.AddScoped<AuthorizationService>();
-
 		builder.Services
 			.AddAuthentication(options => {
 				options.DefaultAuthenticateScheme =
@@ -71,19 +67,17 @@ class Program {
 						ValidIssuer = ADDRESS,
 						ValidAudience = ADDRESS,
 						IssuerSigningKey =
-							new SymmetricSecurityKey(KEY)
+							AuthorizationService.securityKey
 					};
 			});
 		builder.Services.AddMvc();
 
 		var app = builder.Build();
-
 		app.UseAuthentication();
 		app.UseAuthorization();
 		app.UseSwagger();
 		app.UseSwaggerUI();
 		app.MapControllers();
-
 		app.Services.GetService<ZtmDbContext>().Database.EnsureCreated();
 
 		app.Run();

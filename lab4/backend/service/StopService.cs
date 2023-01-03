@@ -1,4 +1,3 @@
-using System.Net;
 using Newtonsoft.Json;
 
 namespace Ztm;
@@ -14,7 +13,8 @@ public class StopService {
 
 	private DateOnly lastStopsListUpdate;
 	private ZtmStopsList? stopsListCache;
-	
+	private Dictionary<int, ZtmStop> stopsByIdCache = new();
+
 	public StopService() {
 		HttpClientHandler handler = new();
 		handler.ServerCertificateCustomValidationCallback =
@@ -43,18 +43,35 @@ public class StopService {
 			DateOnly date = dateStops.Keys.Max();
 			stopsListCache = dateStops[date];
 			lastStopsListUpdate = date;
+			stopsByIdCache.Clear();
+			foreach(var s in stopsListCache.stops) {
+				if(s.stopId != null) {
+					stopsByIdCache.Add((int)s.stopId, s);
+				}
+			}
 		}
 		return stopsListCache;
 	}
 
+	public async Task<Dictionary<int, ZtmStop>> FindAllStopsDictionary() {
+		await FindAllStops();
+		return stopsByIdCache;
+	}
+
 	public async Task<ZtmStop> FindStopById(int id) {
-		var stops = await FindAllStops();
-		return stops.stops.Where(s => s.stopId == id).FirstOrDefault();
+		var dict = await FindAllStopsDictionary();
+		return dict.GetValueOrDefault(id);
 	}
 
 	public async Task<List<ZtmStop>> FindStopsByIds(List<int> ids) {
-		HashSet<int> set = new(ids);
-		var stops = await FindAllStops();
-		return stops.stops.Where(s => s.stopId!=null && set.Contains((int)s.stopId)).ToList();
+		var dict = await FindAllStopsDictionary();
+		List<ZtmStop> stops = new();
+		foreach(var id in ids) {
+			if(dict.ContainsKey(id)) {
+				stops.Add(dict[id]);
+			}
+		}
+
+		return stops;
 	}
 }

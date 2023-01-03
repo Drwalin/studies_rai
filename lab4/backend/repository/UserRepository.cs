@@ -2,9 +2,11 @@ namespace Ztm;
 
 public class UserRepository {
 	private readonly ZtmDbContext dbContext;
+	private readonly UserStopRepository userStopRepository;
 
-	public UserRepository(ZtmDbContext dbContext) {
+	public UserRepository(ZtmDbContext dbContext, UserStopRepository userStopRepository) {
 		this.dbContext = dbContext;
+		this.userStopRepository = userStopRepository;
 	}
 
 	public void Create(UserEntity user) {
@@ -30,6 +32,7 @@ public class UserRepository {
 	}
 
 	public void Delete(UserEntity user) {
+		dbContext.userStops.RemoveRange(user.favouriteStops);
 		dbContext.users.Remove(user);
 		dbContext.SaveChanges();
 	}

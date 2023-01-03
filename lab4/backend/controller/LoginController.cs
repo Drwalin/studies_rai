@@ -30,6 +30,10 @@ public class LoginController : ControllerBase {
 			return new JsonResult(NotFound());
 		}
 
-		return new JsonResult(authorizationService.GenerateToken(req.username));
+		return new JsonResult(new LoginResponse() {
+			username = user.username,
+			id =user.id,
+			token = "Bearer " + authorizationService.GenerateToken(req.username)
+		});
 	}
 }
