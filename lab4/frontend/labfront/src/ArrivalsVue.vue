@@ -48,7 +48,7 @@ export default {
 	methods:{
 		MainMenu() {
 			new Vue({
-				el: "#app",
+				el: "#content",
 				render: h => h(MainBody)
 			});
 		},
