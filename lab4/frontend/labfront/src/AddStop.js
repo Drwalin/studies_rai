@@ -14,7 +14,7 @@ export default {
 		ArrivalsOpen(stop) {
 			window.stopData = stop;
 			new Vue({
-				el: "#content",
+				el: "#app",
 				render: h => h(ArrivalsVue)
 			});
 		},
@@ -38,7 +38,7 @@ export default {
 		},
 		MainMenu() {
 			new Vue({
-				el: "#content",
+				el: "#app",
 				render: h => h(MainBody)
 			});
 		}

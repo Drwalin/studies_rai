@@ -23,19 +23,19 @@ export default {
 	methods:{
 		LogOut() {
 			new Vue({
-				el: "#content",
+				el: "#app",
 				render: h => h(Login)
 			});
 		},
 		AddStop() {
 			new Vue({
-				el: "#content",
+				el: "#app",
 				render: h => h(AddStop)
 			});
 		},
 		BrowseStops() {
 			new Vue({
-				el: "#content",
+				el: "#app",
 				render: h => h(BrowseStops)
 			});
 		},
@@ -45,7 +45,7 @@ export default {
 				undefined,
 				(res)=>{
 					new Vue({
-						el: "#content",
+						el: "#app",
 						render: h=>h(Login)
 					});
 				}

@@ -1,5 +1,5 @@
 <template>
-	<div id="content">
+	<div id="app">
 		<button @click="MainMenu">MainMenu</button>
 		<!--
 		<ul>
