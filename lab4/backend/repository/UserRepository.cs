@@ -30,7 +30,9 @@ public class UserRepository {
 	}
 
 	public void Delete(UserEntity user) {
-		dbContext.userStops.RemoveRange(user.favouriteStops);
+		if(user.favouriteStops != null) {
+			dbContext.userStops.RemoveRange(user.favouriteStops);
+		}
 		dbContext.users.Remove(user);
 		dbContext.SaveChanges();
 	}

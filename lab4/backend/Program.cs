@@ -73,6 +73,8 @@ class Program {
 		builder.Services.AddMvc();
 
 		var app = builder.Build();
+
+        app.UseCors(b=>b.AllowAnyHeader().AllowAnyMethod().SetIsOriginAllowed(o=>true).WithOrigins("http://localhost:8080").AllowCredentials());
 		app.UseAuthentication()
 			.UseAuthorization()
 			.UseSwagger()
